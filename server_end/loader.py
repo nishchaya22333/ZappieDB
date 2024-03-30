@@ -74,7 +74,8 @@ def connectServer(host, username, password):
         server = mysql.connector.connect(
             host=host,
             user=username,
-            password=password
+            password=password,
+            autocommit=True
         )
         return(True)
     except mysql.connector.Error as err:
@@ -93,7 +94,8 @@ def cliConnect():
         server = mysql.connector.connect(
             host=host,
             user=username,
-            password=password
+            password=password,
+            autocommit=True
         )
         print("Connected to MySQL database!")
     except mysql.connector.Error as err:
