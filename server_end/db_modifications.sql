@@ -1,5 +1,18 @@
 
--- Former adds_product table is modified to added_products in accordance to update database design.
+-- Modifying databse to add a table cart to improve performance and ease of use.
+CREATE TABLE `Zappiedb`.`Cart` (
+  `Cart_ID` INT NOT NULL,
+  `Custom_ID` INT NOT NULL,
+  PRIMARY KEY (`Cart_ID`),
+  INDEX `Cust_ID_idx` (`Custom_ID` ASC) VISIBLE,
+  CONSTRAINT `Custom_ID`
+    FOREIGN KEY (`Custom_ID`)
+    REFERENCES `Zappiedb`.`Customer` (`Cust_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+USE Zappiedb;
+DROP TABLE `Order_Products`;-- Former adds_product table is modified to added_products in accordance to update database design.
 ALTER TABLE `adds_product` DROP Constraint `Customer_ID`;
 ALTER TABLE `adds_product` DROP COLUMN `Customer_ID`;
 ALTER TABLE  `adds_product` ADD COLUMN `Cart_ID` INT;
