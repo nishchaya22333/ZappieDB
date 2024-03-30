@@ -52,3 +52,6 @@ RENAME COLUMN `Stor_ID` TO `Store_ID`;
 
 ALTER TABLE `added_products` 
 RENAME COLUMN `Prd_ID` TO `Prod_ID`;
+
+ALTER TABLE `customer` 
+ADD COLUMN `Password` varchar(400);
