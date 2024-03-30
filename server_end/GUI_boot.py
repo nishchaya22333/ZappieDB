@@ -9,15 +9,20 @@ def connect_to_database():
     connect = loader.connectServer(host, username, password)
     if not connect:
         messagebox.showerror("Error", f"Unable to connect to server")
+        server.close()
+        root.destroy()
     else:
         server = loader.getServer()
         load = loader.load(server)
         if not load:
             messagebox.showerror("Error", f"Unable to load database")
+            server.close()
+            root.destroy()
         else:
             messagebox.showinfo("Success", "Connected to MySQL database!")
-            print("Okay")
-        
+            print("ciao")
+            server.close()
+            root.destroy()
         
 
 # Create main window
