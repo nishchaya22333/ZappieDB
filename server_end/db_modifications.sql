@@ -1,17 +1,4 @@
--- Modifying databse to add a table cart to improve performance and ease of use.
-CREATE TABLE `Zappiedb`.`Cart` (
-  `Cart_ID` INT NOT NULL,
-  `Custom_ID` INT NOT NULL,
-  PRIMARY KEY (`Cart_ID`),
-  INDEX `Cust_ID_idx` (`Custom_ID` ASC) VISIBLE,
-  CONSTRAINT `Custom_ID`
-    FOREIGN KEY (`Custom_ID`)
-    REFERENCES `Zappiedb`.`Customer` (`Cust_ID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION);
 
-USE Zappiedb;
-DROP TABLE `Order_Products`;
 -- Former adds_product table is modified to added_products in accordance to update database design.
 ALTER TABLE `adds_product` DROP Constraint `Customer_ID`;
 ALTER TABLE `adds_product` DROP COLUMN `Customer_ID`;
@@ -23,12 +10,9 @@ ALTER TABLE `added_products` ADD FOREIGN KEY (`Cart_ID`) REFERENCES `Cart`(`Cart
 ALTER TABLE `Customer` 
 ADD COLUMN `Current_Cart` INT NULL AFTER `PinCode`;
 
-ALTER TABLE `Customer` 
-ADD CONSTRAINT `Current_Cart`
-  FOREIGN KEY (`Current_Cart`)
-  REFERENCES `Zappiedb`.`Cart` (`Cart_ID`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION;
+ALTER TABLE `customer` 
+ADD COLUMN `Password` varchar(400) NOT NULL AFTER `Current_cart`;
+
 
 ALTER TABLE `Order`
 ADD COLUMN `Cart_ID` INT NOT NULL,
@@ -53,8 +37,8 @@ RENAME COLUMN `Stor_ID` TO `Store_ID`;
 ALTER TABLE `added_products` 
 RENAME COLUMN `Prd_ID` TO `Prod_ID`;
 
-ALTER TABLE `customer` 
-ADD COLUMN `Password` varchar(400) NOT NULL;
 
-AlTER TABLE `cart` 
+
+ALTER TABLE `cart` 
 ADD COLUMN `date_time` DATETIME NOT NULL;
+
