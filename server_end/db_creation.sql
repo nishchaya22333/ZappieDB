@@ -139,3 +139,15 @@ CREATE TABLE `Zappiedb`.`Adds_Product` (
     REFERENCES `Zappiedb`.`Product` (`Prod_ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
+    
+    -- Modifying databse to add a table cart to improve performance and ease of use.
+CREATE TABLE `Zappiedb`.`Cart` (
+  `Cart_ID` INT NOT NULL,
+  `Custom_ID` INT NOT NULL,
+  PRIMARY KEY (`Cart_ID`),
+  INDEX `Cust_ID_idx` (`Custom_ID` ASC) VISIBLE,
+  CONSTRAINT `Custom_ID`
+    FOREIGN KEY (`Custom_ID`)
+    REFERENCES `Zappiedb`.`Customer` (`Cust_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
