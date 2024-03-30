@@ -54,4 +54,7 @@ ALTER TABLE `added_products`
 RENAME COLUMN `Prd_ID` TO `Prod_ID`;
 
 ALTER TABLE `customer` 
-ADD COLUMN `Password` varchar(400);
+ADD COLUMN `Password` varchar(400) NOT NULL;
+
+AlTER TABLE `cart` 
+ADD COLUMN `date_time` DATETIME NOT NULL;
