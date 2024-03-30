@@ -1,16 +1,16 @@
 INSERT INTO `Zappiedb`.`Customer` (`Cust_ID`, `Name`, `Phone_No`, `Email`, `House_No.`, `Locality`, `City`, `PinCode`, `Current_cart`, `Password`) VALUES
-(1001, 'Chandler Bing', 9876543210, 'chandler.bing@example.com', '123', 'Central Perk Street', 'Mumbai', 400001, 2, 'aB7tP2fG9h'),
-(1002, 'Phoebe Buffay', 9876543211, 'phoebe.buffay@example.com', '456', 'Smelly Cat Avenue', 'Delhi', 110001, 4, 'rD3sQ5hJ8k'),
-(1003, 'Ross Geller', 9876543212, 'ross.geller@example.com', '789', 'Dinosaur Museum Road', 'Kolkata', 700001, 6, 'mN6gH0jK1l'),
-(1004, 'Monica Geller', 9876543213, 'monica.geller@example.com', '1011', 'Apartment 20', 'Bangalore', 560001, 8, 'pO9bV4nM2q'),
-(1005, 'Rachel Green', 9876543214, 'rachel.green@example.com', '1213', 'Central Perk Street', 'Chennai', 600001, 10, 'wE5xZ3cV7b'),
-(1006, 'Joey Tribbiani', 9876543215, 'joey.tribbiani@example.com', '1415', 'Hollywood Boulevard', 'Hyderabad', 500001, 12, 'zX8dF1vC4n'),
-(1007, 'Marshall Eriksen', 9876543216, 'marshall.eriksen@example.com', '1617', 'Lily & Marshall House Lane', 'Mumbai', 400001, 14, 'kL2mQ9aZ6s'),
-(1008, 'Lily Aldrin', 9876543217, 'lily.aldrin@example.com', '1819', 'Lily & Marshall House Lane', 'Delhi', 110001, 16, 'hT7yU0iR3e'),
-(1009, 'Ted Mosby', 9876543218, 'ted.mosby@example.com', '2021', 'Apartment 9', 'Kolkata', 700001, 18, 'yI4oP6uY5t'),
-(1010, 'Barney Stinson', 9876543219, 'barney.stinson@example.com', '2223', 'Apartment 9', 'Bangalore', 560001, 20, 'nW1jK8lO9p'),
-(1011, 'Sheldon Cooper', 9876543220, 'sheldon.cooper@example.com', '2425', 'Apartment 4A', 'Chennai', 600001, 22, 'qA2eD5rF6x'),
-(1012, 'Penny Hofstadter', 9876543221, 'penny.hofstadter@example.com', '2627', 'Apartment 4B', 'Hyderabad', 500001, 24, 'uS3gH7wE0i');
+(1001, 'Chandler Bing', 9876543210, 'chandler.bing@example.com', '123', 'Central Perk Street', 'Mumbai', 400001, NULL, 'aB7tP2fG9h'),
+(1002, 'Phoebe Buffay', 9876543211, 'phoebe.buffay@example.com', '456', 'Smelly Cat Avenue', 'Delhi', 110001, NULL, 'rD3sQ5hJ8k'),
+(1003, 'Ross Geller', 9876543212, 'ross.geller@example.com', '789', 'Dinosaur Museum Road', 'Kolkata', 700001, NULL, 'mN6gH0jK1l'),
+(1004, 'Monica Geller', 9876543213, 'monica.geller@example.com', '1011', 'Apartment 20', 'Bangalore', 560001, NULL, 'pO9bV4nM2q'),
+(1005, 'Rachel Green', 9876543214, 'rachel.green@example.com', '1213', 'Central Perk Street', 'Chennai', 600001, NULL, 'wE5xZ3cV7b'),
+(1006, 'Joey Tribbiani', 9876543215, 'joey.tribbiani@example.com', '1415', 'Hollywood Boulevard', 'Hyderabad', 500001, NULL, 'zX8dF1vC4n'),
+(1007, 'Marshall Eriksen', 9876543216, 'marshall.eriksen@example.com', '1617', 'Lily & Marshall House Lane', 'Mumbai', 400001, NULL, 'kL2mQ9aZ6s'),
+(1008, 'Lily Aldrin', 9876543217, 'lily.aldrin@example.com', '1819', 'Lily & Marshall House Lane', 'Delhi', 110001, NULL, 'hT7yU0iR3e'),
+(1009, 'Ted Mosby', 9876543218, 'ted.mosby@example.com', '2021', 'Apartment 9', 'Kolkata', 700001, NULL, 'yI4oP6uY5t'),
+(1010, 'Barney Stinson', 9876543219, 'barney.stinson@example.com', '2223', 'Apartment 9', 'Bangalore', 560001, NULL, 'nW1jK8lO9p'),
+(1011, 'Sheldon Cooper', 9876543220, 'sheldon.cooper@example.com', '2425', 'Apartment 4A', 'Chennai', 600001, NULL, 'qA2eD5rF6x'),
+(1012, 'Penny Hofstadter', 9876543221, 'penny.hofstadter@example.com', '2627', 'Apartment 4B', 'Hyderabad', 500001, NULL, 'uS3gH7wE0i');
 
 
 INSERT INTO `Zappiedb`.`Store` (`Store_ID`,`Name`, `Contact_No.`, `Email`, `Shop_No.`, `Locality`, `City`, `PinCode`) VALUES
