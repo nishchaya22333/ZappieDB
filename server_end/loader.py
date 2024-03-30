@@ -40,10 +40,31 @@ def updateDatabaseModification(server):
     finally:
         cursor.close()
 
+def insertData(server):
+    cursor = server.cursor()
+    with open("data_insertion.sql", "r") as sql_file:
+        sql_queries = sql_file.read()
+    queries = sql_queries.split(";")
+    try:
+        # Execute each SQL query
+        for query in queries:
+            if query.strip():  # Skip empty queries
+                cursor.execute(query)
+
+        print("Insertions Done Successfully")
+        return(True)
+    except mysql.connector.Error as err:
+        print("Error while inserting data:", err)
+        return(False)
+    finally:
+        cursor.close()
+
 def load(server):
     r = createDatabase(server)
     if (r):
         r = updateDatabaseModification(server)
+    if (r):
+        r = insertData(server)
     return r
 
 
@@ -82,5 +103,6 @@ def cliConnect():
 
     createDatabase(server)
     updateDatabaseModification(server)
+    insertData(server)
 
     return server
