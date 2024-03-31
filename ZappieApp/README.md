@@ -16,6 +16,7 @@ Note: Incase, errors are encountered, try using abosulte paths for accessing sql
 Note: Please make sure you are using correct credentials in customer_analysis.py while connecting to mysql server.
 
 Further to use currently working services, access the customer portal using App.py
+
 --------------------------------------------------------------------------------------
 ## Contribution
 2022068 Ananya Garg:  SQL querries, Debugging, Database Creation
