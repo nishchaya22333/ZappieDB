@@ -19,7 +19,7 @@ Further to use currently working services, access the customer portal using App.
 
 --------------------------------------------------------------------------------------
 ## Contribution
-2022068 Ananya Garg:  SQL querries, Debugging, Database Creation
 2022025 Aditi Sharma: Customer Services' Functions, Debugging, Mock Data Insertion
+2022068 Ananya Garg:  SQL querries, Debugging, Database Creation
 2022276 Manas Chabhra: Customer Services' Functions, Basic Interface
 2022333 Nishchaya Roy: Databse Initialisation, Customer Services' Functions, Basic Interface
