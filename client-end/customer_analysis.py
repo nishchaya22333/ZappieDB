@@ -125,55 +125,64 @@ def searchProduct():
 
 def addProduct():
     global custID
-    if(custID != -1):
+    if custID != -1:
         try:
-            server = conn.connect(host = "localhost", user = "root", password = admin, database = "zappiedb", autocommit=True)
+            server = conn.connect(host="localhost", user="root", password=admin, database="zappiedb", autocommit=True)
             cursor = server.cursor()
+
             prod_id = int(input("Enter Product ID: "))
+            quantity = int(input("Enter quantity: "))
+
             cmd = "SELECT Quantity FROM Availability WHERE Prod_ID = %s"
             cursor.execute(cmd, (prod_id,))
-            result = cursor.fetchall()
-            count = result[0][0]
-            quantity = int(input("Enter quantity: "))
-            if (quantity > count or quantity < 0):
+            result = cursor.fetchone()
+
+            if not result:
+                print("Product not found.")
+                return
+
+            available_quantity = result[0]
+
+            if quantity > available_quantity or quantity < 0:
                 print("Ordered Quantity not available")
-            else:
-                count = count - quantity
-                cmd = "UPDATE Availability SET Quantity = %s WHERE Prod_ID = %s"
-                cursor.execute(cmd,(count,prod_id,))
-                cmd = "SELECT Current_Cart FROM customer where Cust_ID = %s"
-                cursor.execute(cmd,(custID,))
-                result = cursor.fetchall()
-                cartID = result[0][0]
-                cmd = "INSERT INTO added_products (Prod_ID, Quantity, Cart_ID) VALUES (%s, %s, %s)"
-                cursor.execute(cmd, (prod_id, quantity, cartID,))
+                return
+
+            cmd = "INSERT INTO added_products (Prod_ID, Quantity, Cart_ID) VALUES (%s, %s, (SELECT Current_Cart FROM customer WHERE Cust_ID = %s))"
+            cursor.execute(cmd, (prod_id, quantity, custID))
+
+            print("Product added successfully.")
 
         except conn.Error as err:
             print("Unable to connect to server.")
             print(err)
-            sys.exit(0)    
+            sys.exit(0)
     else:
         print("Customer not signed in.")
+
 
 def removeProduct():
-    if(custID != -1):
+    if custID != -1:
         try:
-            server = conn.connect(host = "localhost", user = "root", password = admin, database = "zappiedb", autocommit=True)
+            server = conn.connect(host="localhost", user="root", password=admin, database="zappiedb", autocommit=True)
             cursor = server.cursor()
+
             prod_id = int(input("Enter Product ID: "))
-            cmd = "SELECT Current_Cart FROM customer where Cust_ID = %s"
-            cursor.execute(cmd,(custID,))
-            result = cursor.fetchall()
-            cartID = result[0][0]
-            cmd = "DELETE FROM added_products WHERE Prod_ID = %s AND Cart_ID = %s;"
+
+            # Fetch the current cart ID for the customer
+            cursor.execute("SELECT Current_Cart FROM customer WHERE Cust_ID = %s", (custID,))
+            cartID = cursor.fetchone()[0]
+
+            # Delete the product from the added_products table
+            cmd = "DELETE FROM added_products WHERE Prod_ID = %s AND Cart_ID = %s"
             cursor.execute(cmd, (prod_id, cartID))
-            # UPdate quantity in database
+
         except conn.Error as err:
             print("Unable to connect to server.")
             print(err)
-            sys.exit(0)    
+            sys.exit(0)
     else:
         print("Customer not signed in.")
+
 
 
 def placeOrder():
