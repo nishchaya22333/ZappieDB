@@ -197,7 +197,7 @@ def placeOrder():
 
         order_id = getOrdertID()
         placingdateTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        DeliveryDateTime = None
+        
         cart_id = getCartID()
         trans_id = getTransID()
         cust_id = getCustID()
