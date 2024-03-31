@@ -154,6 +154,41 @@ def addProduct():
     else:
         print("Customer not signed in.")
 
+def removeProduct():
+    global custID
+    if custID != -1:
+        try:
+            server = conn.connect(host="localhost", user="root", password=admin, database="zappiedb", autocommit=True)
+            cursor = server.cursor()
+
+            prod_id = int(input("Enter Product ID to remove: "))
+
+            cmd = "SELECT * FROM added_products WHERE Prod_ID = %s AND Cart_ID = (SELECT Current_Cart FROM customer WHERE Cust_ID = %s)"
+            cursor.execute(cmd, (prod_id, custID))
+            result = cursor.fetchall()
+
+            if not result:
+                print("Product not found in the cart.")
+                return
+
+            cmd = "SELECT Quantity FROM added_products WHERE Prod_ID = %s AND Cart_ID = (SELECT Current_Cart FROM customer WHERE Cust_ID = %s)"
+            cursor.execute(cmd, (prod_id, custID))
+            quantity = cursor.fetchone()[0]
+
+            cmd = "UPDATE Availability SET Quantity = Quantity + %s WHERE Prod_ID = %s"
+            cursor.execute(cmd, (quantity, prod_id))
+
+            cmd = "DELETE FROM added_products WHERE Prod_ID = %s AND Cart_ID = (SELECT Current_Cart FROM customer WHERE Cust_ID = %s)"
+            cursor.execute(cmd, (prod_id, custID))
+
+            print("Product removed successfully.")
+        except conn.Error as err:
+            print("Unable to connect to server.")
+            print(err)
+            sys.exit(0)
+    else:
+        print("Customer not signed in.")
+
 def placeOrder():
     try:
         server = conn.connect(host = "localhost", user = "root", password = admin, database = "zappiedb")
@@ -161,8 +196,13 @@ def placeOrder():
         payment_mode = input("Enter preferred payment mode:")
 
         order_id = getOrdertID()
-        placing_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        placingdateTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        DeliveryDateTime = None
         cart_id = getCartID()
+        trans_id = getTransID()
+        cust_id = getCustID()
+        emp_id = selectRandomDeliveryPartner()
+
         cursor.execute("SELECT prod_ID, quantity FROM added_products WHERE cart_id = %s", (cart_id,))
         products_in_cart = cursor.fetchall()
         status = 'pending'
@@ -179,7 +219,7 @@ def placeOrder():
 
             total_amount += product_amount
 
-        cursor.execute("UPDATE orders SET amount = %s WHERE order_id = %s", (total_amount, order_id))
+        cursor.execute("INSERT INTO `Zappiedb`.`Order` (`Order_ID`, `PlacingDateTime`, `DeliveryDateTime`, `Amount`, `Status`, `Trans_ID`, `Cust_ID`, `Emp_ID`, `Cart_ID`, `PaymentMode`)VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (order_id, placingdateTime, DeliveryDateTime, total_amount, status, trans_id, cust_id, emp_id, cart_id, payment_mode))
 
         server.commit()
         print("Order placed successfully!")
