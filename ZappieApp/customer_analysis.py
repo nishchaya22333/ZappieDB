@@ -15,7 +15,7 @@ def getCartID():
     cursor.execute(cmd)
     result = cursor.fetchall()
     l = [i[0] for i in result]
-    return(max(l) + 1)
+    return(max(l)+1)
 
 def getCustID():
     server = conn.connect(host = "localhost", user = "root", password = admin, database = "zappiedb")
@@ -29,14 +29,14 @@ def getCustID():
 def getOrdertID():
     server = conn.connect(host = "localhost", user = "root", password = admin, database = "zappiedb")
     cursor = server.cursor()
-    cmd = "SELECT Order_ID FROM Order"
+    cmd = "SELECT Order_ID FROM `Order`"
     cursor.execute(cmd)
     result = cursor.fetchall()
     l = [i[0] for i in result]
     return(max(l) + 1)
 
 def signUp():
-    server = conn.connect(host="localhost", user="root", password = admin, database="zappiedb", autocommit=True)
+    server = conn.connect(host = "localhost", user = "root", password = admin, database = "zappiedb")
     cursor = server.cursor()
 
     # Input customer data
@@ -104,7 +104,36 @@ def showdatabases():
     except:
         print("Error in connection")
 
+def showAllProducts():
+    try:
+        server = conn.connect(host="localhost", user="root", password=admin, database="zappiedb")
+        cursor = server.cursor()
 
+        # Get column names
+        cursor.execute("SHOW COLUMNS FROM Product")
+        columns = [column[0] for column in cursor.fetchall()]
+
+        # Fetch all products
+        cursor.execute("SELECT * FROM Product")
+        products = cursor.fetchall()
+
+        if products:
+            print("Products:")
+            # Print column names
+            print(", ".join(columns))
+
+            # Print product data
+            for product in products:
+                print(", ".join(str(value) for value in product))
+        else:
+            print("No products found.")
+
+        cursor.close()
+    except Exception as e:
+        print("Error:", e)
+
+# Example usage:
+showAllProducts()
 
 def searchProduct():
     try:
@@ -118,8 +147,7 @@ def searchProduct():
 
         result = cursor.fetchall()
         for row in result:
-            print(row)
-
+            print(f"ID: {row[0]}, Name: {row[1]}, Price: {row[2]}, Category: {row[3]}")
 
     except conn.Error as err:
         print("Unable to connect to server.")
@@ -182,48 +210,77 @@ def removeProduct(custID):
     else:
         print("Customer not signed in.")
 
+def getCurrentCartID():
+    server = conn.connect(host = "localhost", user = "root", password = admin, database = "zappiedb")
+    cursor = server.cursor()
+    cmd = "SELECT Cart_ID FROM cart"
+    cursor.execute(cmd)
+    result = cursor.fetchall()
+    l = [i[0] for i in result]
+    return(max(l))
 
 def placeOrder(custID):
     try:
         
-        conn = conn.connect(host="localhost", user="root", password=admin, database="zappiedb")
-        cursor = conn.cursor()
+        server = conn.connect(host = "localhost", user = "root", password = admin, database = "zappiedb")
+        cursor = server.cursor()
 
        
         payment_mode = input("Enter preferred payment mode: ")
-
+        print("1")
         order_id = getOrdertID()
-
+        print(2)
         placingdateTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-        cart_id = getCartID()
-        trans_id = getTransID(conn)
-        emp_id = selectRandomDeliveryPartner(conn)
+        cart_id = getCurrentCartID()
+        print(3)
+        trans_id = getTransID()
+        print(4)
+        emp_id = selectRandomDeliveryPartner()
+        cursor.execute("SELECT prod_ID, quantity FROM added_products WHERE cart_id = %s", (cart_id,))
+        products_in_cart = cursor.fetchall()
 
-        cursor.execute("INSERT INTO orders (order_id, placingdateTime, payment_mode, cart_id, trans_id, cust_id, emp_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
-                       (order_id, placingdateTime, payment_mode, cart_id, trans_id, custID, emp_id))
+        total_amount = 0
 
-        
+        # Iterate through each product in the cart
+        for product in products_in_cart:
+            prod_id = product[0]
+            quantity = product[1]
+
+            # Search for the price of the product in the product table
+            cursor.execute("SELECT price FROM product WHERE prod_ID = %s", (prod_id,))
+            price = cursor.fetchone()[0]
+
+            # Calculate the amount for this product (price * quantity)
+            product_amount = price * quantity
+
+            # Add the product's amount to the total amount
+            total_amount += product_amount
+        status="Pending"
+        print(5)
+        cursor.execute("INSERT INTO `Order` (order_id, placingdateTime, PaymentMode, Amount, cart_id, trans_id, cust_id, emp_id, `Status`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                       (order_id, placingdateTime, payment_mode, total_amount, cart_id, trans_id, custID, emp_id, status))
+        print(6)
+        server.commit()
 
         print("Order placed successfully!")
     except Exception as e:
         print("Error:", e)
-    
-
+        
 
 
 def getTransID():
     try:
-        conn = conn.connect(host="localhost", user="root", password=admin, database="zappiedb")
-        cursor = conn.cursor()
+        server = conn.connect(host="localhost", user="root", password=admin, database="zappiedb")
+        cursor = server.cursor()
 
         cursor.execute("SELECT trans_ID FROM `Order`")
 
         result = cursor.fetchall()
 
         trans_ids = [row[0] for row in result]
-
-        next_trans_id = max(trans_ids) + 1 if trans_ids else 1
+        id_num=[int(row[1:]) for row in trans_ids]
+        next_trans_id = "T"+str(max(id_num) + 1) if id_num else 1
 
         cursor.close()
 
@@ -233,10 +290,10 @@ def getTransID():
         return None
 
 
-def selectRandomDeliveryPartner(conn):
+def selectRandomDeliveryPartner():
     try:
         server = conn.connect(host = "localhost", user = "root", password = admin, database = "zappiedb")
-        cursor = conn.cursor()
+        cursor = server.cursor()
 
         # Fetch all Emp_IDs from the DeliveryPartner table
         cursor.execute("SELECT Emp_ID FROM DeliveryPartner")
