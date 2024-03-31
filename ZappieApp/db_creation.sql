@@ -45,7 +45,7 @@ CREATE TABLE `Zappiedb`.`DeliveryPartner` (
 CREATE TABLE `Zappiedb`.`Order` (
   `Order_ID` INT NOT NULL,
   `PlacingDateTime` DATETIME NOT NULL,
-  `DeliveryDateTime` DATETIME NOT NULL,
+  `DeliveryDateTime` DATETIME,
   `PaymentMode` VARCHAR(45) NOT NULL,
   `Amount` INT UNSIGNED NOT NULL,
   `Status` VARCHAR(45) NOT NULL,
