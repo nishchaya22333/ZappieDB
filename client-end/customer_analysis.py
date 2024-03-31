@@ -4,6 +4,7 @@ import mysql.connector as conn
 import sys
 # Global
 custID = -1
+blockedAccounts = []
 
 admin = "password"
 
@@ -63,11 +64,11 @@ def signUp():
 
 # Add trigger here...
 def signIn():
-    name = input("Enter name : ")
+    name = input("Enter e-mail : ")
     pwd = input("Enter password : ")
     server = conn.connect(host = "localhost", user = "root", password = admin, database = "zappiedb", autocommit=True)
     cursor = server.cursor()
-    query = "SELECT * FROM Customer WHERE Name = %s AND Password = %s"
+    query = "SELECT * FROM Customer WHERE Email = %s AND Password = %s"
     cursor.execute(query, (name, pwd))
     result = cursor.fetchall()
     current_cart = getCartID()
@@ -155,39 +156,25 @@ def addProduct():
         print("Customer not signed in.")
 
 def removeProduct():
-    global custID
-    if custID != -1:
+    if(custID != -1):
         try:
-            server = conn.connect(host="localhost", user="root", password=admin, database="zappiedb", autocommit=True)
+            server = conn.connect(host = "localhost", user = "root", password = admin, database = "zappiedb", autocommit=True)
             cursor = server.cursor()
-
-            prod_id = int(input("Enter Product ID to remove: "))
-
-            cmd = "SELECT * FROM added_products WHERE Prod_ID = %s AND Cart_ID = (SELECT Current_Cart FROM customer WHERE Cust_ID = %s)"
-            cursor.execute(cmd, (prod_id, custID))
+            prod_id = int(input("Enter Product ID: "))
+            cmd = "SELECT Current_Cart FROM customer where Cust_ID = %s"
+            cursor.execute(cmd,(custID,))
             result = cursor.fetchall()
-
-            if not result:
-                print("Product not found in the cart.")
-                return
-
-            cmd = "SELECT Quantity FROM added_products WHERE Prod_ID = %s AND Cart_ID = (SELECT Current_Cart FROM customer WHERE Cust_ID = %s)"
-            cursor.execute(cmd, (prod_id, custID))
-            quantity = cursor.fetchone()[0]
-
-            cmd = "UPDATE Availability SET Quantity = Quantity + %s WHERE Prod_ID = %s"
-            cursor.execute(cmd, (quantity, prod_id))
-
-            cmd = "DELETE FROM added_products WHERE Prod_ID = %s AND Cart_ID = (SELECT Current_Cart FROM customer WHERE Cust_ID = %s)"
-            cursor.execute(cmd, (prod_id, custID))
-
-            print("Product removed successfully.")
+            cartID = result[0][0]
+            cmd = "DELETE FROM added_products WHERE Prod_ID = %s AND Cart_ID = %s;"
+            cursor.execute(cmd, (prod_id, cartID))
+            # UPdate quantity in database
         except conn.Error as err:
             print("Unable to connect to server.")
             print(err)
-            sys.exit(0)
+            sys.exit(0)    
     else:
         print("Customer not signed in.")
+
 
 def placeOrder():
     try:
@@ -196,13 +183,8 @@ def placeOrder():
         payment_mode = input("Enter preferred payment mode:")
 
         order_id = getOrdertID()
-        placingdateTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        
+        placing_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         cart_id = getCartID()
-        trans_id = getTransID()
-        cust_id = getCustID()
-        emp_id = selectRandomDeliveryPartner()
-
         cursor.execute("SELECT prod_ID, quantity FROM added_products WHERE cart_id = %s", (cart_id,))
         products_in_cart = cursor.fetchall()
         status = 'pending'
@@ -219,7 +201,7 @@ def placeOrder():
 
             total_amount += product_amount
 
-        cursor.execute("INSERT INTO `Zappiedb`.`Order` (`Order_ID`, `PlacingDateTime`, `DeliveryDateTime`, `Amount`, `Status`, `Trans_ID`, `Cust_ID`, `Emp_ID`, `Cart_ID`, `PaymentMode`)VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (order_id, placingdateTime, DeliveryDateTime, total_amount, status, trans_id, cust_id, emp_id, cart_id, payment_mode))
+        cursor.execute("UPDATE orders SET amount = %s WHERE order_id = %s", (total_amount, order_id))
 
         server.commit()
         print("Order placed successfully!")
@@ -227,34 +209,6 @@ def placeOrder():
         print("Error:", e)
 
     return
-
-def getCartID():
-    server = conn.connect(host = "localhost", user = "root", password = admin, database = "zappiedb")
-    cursor = server.cursor()
-    cmd = "SELECT Cart_ID FROM cart"
-    cursor.execute(cmd)
-    result = cursor.fetchall()
-    l = [i[0] for i in result]
-    return(max(l) + 1)
-
-
-def getCustID():
-    server = conn.connect(host = "localhost", user = "root", password = admin, database = "zappiedb")
-    cursor = server.cursor()
-    cmd = "SELECT Cust_ID FROM customer"
-    cursor.execute(cmd)
-    result = cursor.fetchall()
-    l = [i[0] for i in result]
-    return(max(l) + 1)
-
-def getOrdertID():
-    server = conn.connect(host = "localhost", user = "root", password = admin, database = "zappiedb")
-    cursor = server.cursor()
-    cmd = "SELECT Order_ID FROM Order"
-    cursor.execute(cmd)
-    result = cursor.fetchall()
-    l = [i[0] for i in result]
-    return(max(l) + 1)
 
 
 def selectRandomDeliveryPartner(conn):
