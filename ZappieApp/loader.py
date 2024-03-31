@@ -4,7 +4,7 @@ import mysql.connector
 server = 0
 def createDatabase(server):
     cursor = server.cursor()
-    with open("ZappieApp/db_creation.sql", "r") as sql_file:
+    with open("C:/Users/dell/Desktop/ZappieDB-main/ZappieDB-main/ZappieApp/db_creation.sql", "r") as sql_file:
         sql_queries = sql_file.read()
     queries = sql_queries.split(";")
     try:
@@ -21,9 +21,11 @@ def createDatabase(server):
     finally:
         cursor.close()
 
+
+
 def updateDatabaseModification(server):
     cursor = server.cursor()
-    with open("ZappieApp/db_modifications.sql", "r") as sql_file:
+    with open("C:/Users/dell/Desktop/ZappieDB-main/ZappieDB-main/ZappieApp/db_modifications.sql", "r") as sql_file:
         sql_queries = sql_file.read()
     queries = sql_queries.split(";")
     try:
@@ -39,10 +41,31 @@ def updateDatabaseModification(server):
         return(False)
     finally:
         cursor.close()
+        server.commit()
+
+import mysql.connector
+
+def createTriggers(server):
+    cursor = server.cursor()
+    try:
+        with open("C:/Users/dell/Desktop/ZappieDB-main/ZappieDB-main/ZappieApp/adding_triggers.sql", "r") as sql_file:
+            sql_queries = sql_file.read()
+
+        # Execute all SQL queries
+        cursor.execute(sql_queries, multi=True)
+        
+        print("Triggers Created Successfully")
+        return True
+    except mysql.connector.Error as err:
+        print("Error while creating triggers:", err)
+        return False
+    finally:
+        cursor.close()
+
 
 def insertData(server):
     cursor = server.cursor()
-    with open("ZappieApp/data_insertion.sql", "r") as sql_file:
+    with open("C:/Users/dell/Desktop/ZappieDB-main/ZappieDB-main/ZappieApp/data_insertion.sql", "r") as sql_file:
         sql_queries = sql_file.read()
     queries = sql_queries.split(";")
     try:
@@ -58,6 +81,7 @@ def insertData(server):
         return(False)
     finally:
         cursor.close()
+        server.commit()
 
 def load(server):
     r = createDatabase(server)
@@ -104,7 +128,9 @@ def cliConnect():
         sys.exit(0)
 
     createDatabase(server)
+    createTriggers(server)
     updateDatabaseModification(server)
     insertData(server)
+    
 
     return server
