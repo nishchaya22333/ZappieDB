@@ -4,7 +4,7 @@ import mysql.connector
 server = 0
 def createDatabase(server):
     cursor = server.cursor()
-    with open("C:/Users/dell/Desktop/ZappieDB-main/ZappieDB-main/ZappieApp/db_creation.sql", "r") as sql_file:
+    with open("/Users/ananyagarg/Sem4/ZappieDB-main/ZappieApp/db_creation.sql", "r") as sql_file:
         sql_queries = sql_file.read()
     queries = sql_queries.split(";")
     try:
@@ -25,7 +25,7 @@ def createDatabase(server):
 
 def updateDatabaseModification(server):
     cursor = server.cursor()
-    with open("C:/Users/dell/Desktop/ZappieDB-main/ZappieDB-main/ZappieApp/db_modifications.sql", "r") as sql_file:
+    with open("/Users/ananyagarg/Sem4/ZappieDB-main/ZappieApp/db_modifications.sql", "r") as sql_file:
         sql_queries = sql_file.read()
     queries = sql_queries.split(";")
     try:
@@ -48,7 +48,7 @@ import mysql.connector
 def createTriggers(server):
     cursor = server.cursor()
     try:
-        with open("C:/Users/dell/Desktop/ZappieDB-main/ZappieDB-main/ZappieApp/adding_triggers.sql", "r") as sql_file:
+        with open("/Users/ananyagarg/Sem4/ZappieDB-main/ZappieApp/data_insertion.sql", "r") as sql_file:
             sql_queries = sql_file.read()
 
         # Execute all SQL queries
@@ -65,7 +65,7 @@ def createTriggers(server):
 
 def insertData(server):
     cursor = server.cursor()
-    with open("C:/Users/dell/Desktop/ZappieDB-main/ZappieDB-main/ZappieApp/data_insertion.sql", "r") as sql_file:
+    with open("/Users/ananyagarg/Sem4/ZappieDB-main/ZappieApp/data_insertion.sql", "r") as sql_file:
         sql_queries = sql_file.read()
     queries = sql_queries.split(";")
     try:

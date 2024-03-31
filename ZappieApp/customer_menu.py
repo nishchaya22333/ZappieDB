@@ -11,9 +11,9 @@ def main():
         choice = input("Enter your choice: ")
 
         if choice == "1":
-            customer_analysis.signIn()
-            if (customer_analysis.custID != -1):
-                shopNow()
+            custID = customer_analysis.signIn()
+            if (custID != -1):
+                shopNow(custID)
         elif choice == "2":
             customer_analysis.signUp()
         elif choice == "3":
@@ -23,7 +23,7 @@ def main():
             print(art.dog)
             print("Invalid choice. Please try again.")
 
-def shopNow():
+def shopNow(custID):
     while True:
         print("Menu:")
         print("1. Add Product")
@@ -35,13 +35,13 @@ def shopNow():
         choice = input("Enter your choice: ")
 
         if choice == "1":
-            customer_analysis.addProduct()
+            customer_analysis.addProduct(custID)
         elif choice == "2":
-            customer_analysis.removeProduct()
+            customer_analysis.removeProduct(custID)
         elif choice == "3":
-            customer_analysis.placeOrder()
+            customer_analysis.placeOrder(custID)
         elif choice == "4":
-            customer_analysis.menuForCustomerAnalysis()
+            customer_analysis.menuForCustomerAnalysis(custID)
         elif choice == "5":
             print("Exiting the program...")
             break

@@ -1,4 +1,4 @@
-INSERT INTO `Zappiedb`.`Customer` (`Cust_ID`, `Name`, `Phone_No`, `Email`, `House_No.`, `Locality`, `City`, `PinCode`, `Current_cart`, `Password`) VALUES
+INSERT INTO `Zappiedb`.`Customer` (`Cust_ID`, `Name`, `Phone_No`, `Email`, `House_No.`, `Locality`, `City`, `PinCode`, `Current_Cart`, `Password`) VALUES
 (1001, 'Chandler Bing', 9876543210, 'chandler.bing@example.com', '123', 'Central Perk Street', 'Mumbai', 400001, NULL, 'aB7tP2fG9h'),
 (1002, 'Phoebe Buffay', 9876543211, 'phoebe.buffay@example.com', '456', 'Smelly Cat Avenue', 'Delhi', 110001, NULL, 'rD3sQ5hJ8k'),
 (1003, 'Ross Geller', 9876543212, 'ross.geller@example.com', '789', 'Dinosaur Museum Road', 'Kolkata', 700001, NULL, 'mN6gH0jK1l'),

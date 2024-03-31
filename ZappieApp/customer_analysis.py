@@ -3,10 +3,10 @@ from datetime import datetime
 import mysql.connector as conn
 import sys
 # Global
-custID = -1
+# custID = -1
 blockedAccounts = []
 
-admin = "password"
+admin = "rishtenaate09"
 
 def getCartID():
     server = conn.connect(host = "localhost", user = "root", password = admin, database = "zappiedb")
@@ -48,11 +48,11 @@ def signUp():
     locality = input("Enter locality: ")
     city = input("Enter city: ")
     pincode = int(input("Enter pincode: "))
-    current_cart = int(input("Enter current cart: "))
+    # current_cart = int(input("Enter current cart: "))
     password = input("Enter password: ")
 
     # Insert customer data into the database
-    cursor.execute("INSERT INTO Customer (Cust_ID, Name, Phone_No, Email, House_No, Locality, City, PinCode, Current_cart, Password) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (cust_id, name, phone_no, email, house_no, locality, city, pincode, current_cart, password))
+    cursor.execute("INSERT INTO Customer (Cust_ID, Name, Phone_No, Email, `House_No.`, Locality, City, PinCode, Current_cart, Password) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, null, %s)", (cust_id, name, phone_no, email, house_no, locality, city, pincode, password))
 
     # Commit the changes
     server.commit()
@@ -66,20 +66,25 @@ def signUp():
 def signIn():
     name = input("Enter e-mail : ")
     pwd = input("Enter password : ")
+    cart_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     server = conn.connect(host = "localhost", user = "root", password = admin, database = "zappiedb", autocommit=True)
     cursor = server.cursor()
     query = "SELECT * FROM Customer WHERE Email = %s AND Password = %s"
-    cursor.execute(query, (name, pwd))
+    cursor.execute(query, (name, pwd,))
     result = cursor.fetchall()
     current_cart = getCartID()
     if len(result) > 0:
         custID = result[0][0]
+        cmd = "INSERT INTO cart (Cart_ID, Cust_ID, date_time) VALUES (%s, %s, %s)"
+        cursor.execute(cmd,(current_cart,custID,cart_time,))
         cmd = "UPDATE customer SET Current_Cart = %s WHERE Cust_ID = %s"
         cursor.execute(cmd, (current_cart, custID,))
         print(custID)
         print("Sign in successful.")
+        return result[0][0]
     else:
         print("Sign in failed. Please check your name and password.")
+        return -1
 
     cursor.close()
     server.close()
@@ -123,8 +128,7 @@ def searchProduct():
     return
 
 
-def addProduct():
-    global custID
+def addProduct(custID):
     if(custID != -1):
         try:
             server = conn.connect(host = "localhost", user = "root", password = admin, database = "zappiedb", autocommit=True)
@@ -133,6 +137,9 @@ def addProduct():
             cmd = "SELECT Quantity FROM Availability WHERE Prod_ID = %s"
             cursor.execute(cmd, (prod_id,))
             result = cursor.fetchall()
+            if (len(count) == 0):
+                print("Product not found.")
+                return
             count = result[0][0]
             quantity = int(input("Enter quantity: "))
             if (quantity > count or quantity < 0):
@@ -155,7 +162,7 @@ def addProduct():
     else:
         print("Customer not signed in.")
 
-def removeProduct():
+def removeProduct(custID):
     if(custID != -1):
         try:
             server = conn.connect(host = "localhost", user = "root", password = admin, database = "zappiedb", autocommit=True)
@@ -178,10 +185,11 @@ def removeProduct():
 
 def placeOrder():
     try:
-        # Establish connection to the MySQL server
+        
         conn = conn.connect(host="localhost", user="root", password=admin, database="zappiedb")
         cursor = conn.cursor()
 
+       
         payment_mode = input("Enter preferred payment mode: ")
 
         order_id = getOrdertID()
@@ -203,7 +211,6 @@ def placeOrder():
         print("Error:", e)
         conn.rollback()
     finally:
-        # Close cursor and connection
         cursor.close()
         conn.close()
 
@@ -323,7 +330,7 @@ def edit_profile(cust_id):
             locality = input("Enter new locality: ")
             city = input("Enter new city: ")
             pincode = input("Enter new pincode: ")
-            cursor.execute("UPDATE Customer SET House_No = %s, Locality = %s, City = %s, PinCode = %s WHERE Cust_ID = %s", (house_no, locality, city, pincode, cust_id))
+            cursor.execute("UPDATE Customer SET `House_No.` = %s, Locality = %s, City = %s, PinCode = %s WHERE Cust_ID = %s", (house_no, locality, city, pincode, cust_id))
             print("Address updated successfully.")
         elif choice == "2":
             password = input("Enter new password: ")
@@ -338,7 +345,7 @@ def edit_profile(cust_id):
     cursor.close()
     db.close()
 
-def menuForCustomerAnalysis():
+def menuForCustomerAnalysis(custID):
     while True:
         print("\nMenu:")
         print("1. View previous orders")
