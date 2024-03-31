@@ -227,40 +227,30 @@ def placeOrder(custID):
 
        
         payment_mode = input("Enter preferred payment mode: ")
-        print("1")
         order_id = getOrdertID()
-        print(2)
         placingdateTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         cart_id = getCurrentCartID()
-        print(3)
         trans_id = getTransID()
-        print(4)
         emp_id = selectRandomDeliveryPartner()
         cursor.execute("SELECT prod_ID, quantity FROM added_products WHERE cart_id = %s", (cart_id,))
         products_in_cart = cursor.fetchall()
 
         total_amount = 0
 
-        # Iterate through each product in the cart
         for product in products_in_cart:
             prod_id = product[0]
             quantity = product[1]
 
-            # Search for the price of the product in the product table
             cursor.execute("SELECT price FROM product WHERE prod_ID = %s", (prod_id,))
             price = cursor.fetchone()[0]
 
-            # Calculate the amount for this product (price * quantity)
             product_amount = price * quantity
 
-            # Add the product's amount to the total amount
             total_amount += product_amount
         status="Pending"
-        print(5)
         cursor.execute("INSERT INTO `Order` (order_id, placingdateTime, PaymentMode, Amount, cart_id, trans_id, cust_id, emp_id, `Status`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
                        (order_id, placingdateTime, payment_mode, total_amount, cart_id, trans_id, custID, emp_id, status))
-        print(6)
         server.commit()
 
         print("Order placed successfully!")
