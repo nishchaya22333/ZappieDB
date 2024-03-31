@@ -137,7 +137,7 @@ def addProduct(custID):
             cmd = "SELECT Quantity FROM Availability WHERE Prod_ID = %s"
             cursor.execute(cmd, (prod_id,))
             result = cursor.fetchall()
-            if (len(count) == 0):
+            if (len(result) == 0):
                 print("Product not found.")
                 return
             count = result[0][0]
@@ -183,7 +183,7 @@ def removeProduct(custID):
         print("Customer not signed in.")
 
 
-def placeOrder():
+def placeOrder(custID):
     try:
         
         conn = conn.connect(host="localhost", user="root", password=admin, database="zappiedb")
@@ -198,25 +198,23 @@ def placeOrder():
 
         cart_id = getCartID()
         trans_id = getTransID(conn)
-        cust_id = getCustID()
         emp_id = selectRandomDeliveryPartner(conn)
 
         cursor.execute("INSERT INTO orders (order_id, placingdateTime, payment_mode, cart_id, trans_id, cust_id, emp_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
-                       (order_id, placingdateTime, payment_mode, cart_id, trans_id, cust_id, emp_id))
+                       (order_id, placingdateTime, payment_mode, cart_id, trans_id, custID, emp_id))
 
-        conn.commit()
+        
 
         print("Order placed successfully!")
     except Exception as e:
         print("Error:", e)
-        conn.rollback()
-    finally:
-        cursor.close()
-        conn.close()
+    
 
 
-def getTransID(conn):
+
+def getTransID():
     try:
+        conn = conn.connect(host="localhost", user="root", password=admin, database="zappiedb")
         cursor = conn.cursor()
 
         cursor.execute("SELECT trans_ID FROM `Order`")
