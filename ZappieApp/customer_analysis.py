@@ -178,37 +178,54 @@ def removeProduct():
 
 def placeOrder():
     try:
-        server = conn.connect(host = "localhost", user = "root", password = admin, database = "zappiedb")
-        cursor = server.cursor()
-        payment_mode = input("Enter preferred payment mode:")
+        # Establish connection to the MySQL server
+        conn = conn.connect(host="localhost", user="root", password=admin, database="zappiedb")
+        cursor = conn.cursor()
+
+        payment_mode = input("Enter preferred payment mode: ")
 
         order_id = getOrdertID()
-        placing_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        placingdateTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
         cart_id = getCartID()
-        cursor.execute("SELECT prod_ID, quantity FROM added_products WHERE cart_id = %s", (cart_id,))
-        products_in_cart = cursor.fetchall()
-        status = 'pending'
-        total_amount = 0
+        trans_id = getTransID(conn)
+        cust_id = getCustID()
+        emp_id = selectRandomDeliveryPartner(conn)
 
-        for product in products_in_cart:
-            prod_id = product[0]
-            quantity = product[1]
+        cursor.execute("INSERT INTO orders (order_id, placingdateTime, payment_mode, cart_id, trans_id, cust_id, emp_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
+                       (order_id, placingdateTime, payment_mode, cart_id, trans_id, cust_id, emp_id))
 
-            cursor.execute("SELECT price FROM product WHERE prod_ID = %s", (prod_id,))
-            price = cursor.fetchone()[0]
+        conn.commit()
 
-            product_amount = price * quantity
-
-            total_amount += product_amount
-
-        cursor.execute("UPDATE orders SET amount = %s WHERE order_id = %s", (total_amount, order_id))
-
-        server.commit()
         print("Order placed successfully!")
     except Exception as e:
         print("Error:", e)
+        conn.rollback()
+    finally:
+        # Close cursor and connection
+        cursor.close()
+        conn.close()
 
-    return
+
+def getTransID(conn):
+    try:
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT trans_ID FROM `Order`")
+
+        result = cursor.fetchall()
+
+        trans_ids = [row[0] for row in result]
+
+        next_trans_id = max(trans_ids) + 1 if trans_ids else 1
+
+        cursor.close()
+
+        return next_trans_id
+    except Exception as e:
+        print("Error:", e)
+        return None
 
 
 def selectRandomDeliveryPartner(conn):
