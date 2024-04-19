@@ -61,3 +61,13 @@ ADD COLUMN `Password` varchar(400) NOT NULL;
 ALTER TABLE `cart` 
 ADD COLUMN `date_time` DATETIME NOT NULL;
 
+ALTER TABLE Product
+ADD COLUMN Total_Quantity INT UNSIGNED;
+
+UPDATE Product AS p
+JOIN (
+    SELECT Prodct_ID, SUM(Quantity) AS Total_Quantity
+    FROM Availability
+    GROUP BY Prodct_ID
+) AS a ON p.Prod_ID = a.Prodct_ID
+SET p.Total_Quantity = a.Total_Quantity; 
