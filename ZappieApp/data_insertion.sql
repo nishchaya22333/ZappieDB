@@ -183,3 +183,41 @@ VALUES
 (2, 2021, 2, '2024-03-31 07:10:00'),
 (3, 2022, 3, '2024-03-31 08:10:00'),
 (4, 2023, 4, '2024-03-31 09:10:00');
+
+
+
+UPDATE Zappiedb.DeliveryPartner SET rating = 4.5, status = 'Active' WHERE Emp_ID = 1;
+UPDATE Zappiedb.DeliveryPartner SET rating = 3.5, status = 'Active' WHERE Emp_ID = 2;
+UPDATE Zappiedb.DeliveryPartner SET rating = 4.5, status = 'Free' WHERE Emp_ID = 3;
+UPDATE Zappiedb.DeliveryPartner SET rating = 4.6, status = 'Active' WHERE Emp_ID = 4;
+UPDATE Zappiedb.DeliveryPartner SET rating = 4.9, status = 'Free' WHERE Emp_ID = 5;
+UPDATE Zappiedb.DeliveryPartner SET rating = 5.0, status = 'Active' WHERE Emp_ID = 6;
+UPDATE Zappiedb.DeliveryPartner SET rating = 4.0, status = 'Free' WHERE Emp_ID = 7;
+UPDATE Zappiedb.DeliveryPartner SET rating = 4.2, status = 'Active' WHERE Emp_ID = 8;
+UPDATE Zappiedb.DeliveryPartner SET rating = 4.1, status = 'Free' WHERE Emp_ID = 9;
+UPDATE Zappiedb.DeliveryPartner SET rating = 4.2, status = 'Active' WHERE Emp_ID = 10;
+
+UPDATE Zappiedb.Order SET Feedback = 'Product received was damaged' WHERE Order_ID = 2000;
+UPDATE Zappiedb.Order SET Feedback = 'Good service' WHERE Order_ID = 2001;
+UPDATE Zappiedb.Order SET Feedback = NULL WHERE Order_ID = 2002;
+UPDATE Zappiedb.Order SET Feedback = 'Satisfied with the product' WHERE Order_ID = 2003;
+UPDATE Zappiedb.Order SET Feedback = 'Fast delivery and good packaging' WHERE Order_ID = 2004;
+UPDATE Zappiedb.Order SET Feedback = NULL WHERE Order_ID = 2005;
+UPDATE Zappiedb.Order SET Feedback = NULL WHERE Order_ID = 2006;
+UPDATE Zappiedb.Order SET Feedback = 'Excellent service' WHERE Order_ID = 2007;
+UPDATE Zappiedb.Order SET Feedback = 'Product quality could be better' WHERE Order_ID = 2008;
+UPDATE Zappiedb.Order SET Feedback = NULL WHERE Order_ID = 2009;
+UPDATE Zappiedb.Order SET Feedback = 'Happy with the purchase' WHERE Order_ID = 2010;
+UPDATE Zappiedb.Order SET Feedback = NULL WHERE Order_ID = 2011;
+UPDATE Zappiedb.Order SET Feedback = NULL WHERE Order_ID = 2012;
+UPDATE Zappiedb.Order SET Feedback = 'No issues with the order' WHERE Order_ID = 2013;
+UPDATE Zappiedb.Order SET Feedback = NULL WHERE Order_ID = 2014;
+UPDATE Zappiedb.Order SET Feedback = 'Great experience with the delivery' WHERE Order_ID = 2015;
+UPDATE Zappiedb.Order SET Feedback = NULL WHERE Order_ID = 2016;
+UPDATE Zappiedb.Order SET Feedback = 'Timely delivery, thank you' WHERE Order_ID = 2017;
+UPDATE Zappiedb.Order SET Feedback = 'Smooth transaction' WHERE Order_ID = 2018;
+UPDATE Zappiedb.Order SET Feedback = NULL WHERE Order_ID = 2019;
+UPDATE Zappiedb.Order SET Feedback = 'Item received was not as described' WHERE Order_ID = 2020;
+UPDATE Zappiedb.Order SET Feedback = NULL WHERE Order_ID = 2021;
+UPDATE Zappiedb.Order SET Feedback = 'Prompt delivery' WHERE Order_ID = 2022;
+UPDATE Zappiedb.Order SET Feedback = NULL WHERE Order_ID = 2023;
