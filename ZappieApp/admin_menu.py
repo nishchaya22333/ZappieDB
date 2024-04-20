@@ -2,6 +2,7 @@ import art
 import GUI_boot
 import getpass
 import admin_funtions
+import seller_functions
 
 def admin_access():
     # print("ok")
@@ -18,6 +19,33 @@ def admin_access():
         print(art.traffic)
         print("Invalid Choice.")
 
+def seller_access():
+    storeid = seller_functions.sellerSignIn()
+    if (storeid == -1):
+        print("Sign In Failed")
+    else:
+        print("Sign in successful")
+        while(True):
+            choice = input("1. Add New Product \n2. Increase Availibility \n3. Get Inventory Summary \n4. Get Order History \n5. Get Order Summary \n5. Log Out \nEnter your choice: ")
+            if (choice == "1"):
+                seller_functions.addNewProduct(storeid)
+            elif (choice == "2"):
+                seller_functions.increaseAvailability(storeid)
+            elif (choice == "3"):
+                seller_functions.getInventorySummary(storeid)
+            elif (choice == "4"):
+                seller_functions.getOrderHistory(storeid)
+            elif (choice == "5"):
+                orderid = int(input("Enter Order ID to get summary: "))
+                seller_functions.getOrderSummary(orderid)
+            elif (choice == "6"):
+                storeid = -1
+                break
+            else:
+                print(art.traffic)
+                print("Invalid Choice.")
+
+
 def main():
     choice = input("1. Boot server and create database \n2. Admin LogIn \n3. Seller LogIn \n4. Employee LogIn \nEnter your choice: ")
     if (choice == "1"):
@@ -32,8 +60,9 @@ def main():
         if(x == "admin" and y == "admin"):
             admin_access()
     elif (choice == "3"):
-        pass
+        seller_access()
         #1 add new product 2. increase availibility 3. get inventory summary 4. get order summary
+
     elif (choice == "4"):
         pass
         # 1. get personal details 2. edit personal details 3. view delivery history 4. view rating
