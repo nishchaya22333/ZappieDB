@@ -109,6 +109,8 @@ def load(server):
         r = insertData(server)
     if (r):
         r = modifyProduct(server)
+    if (r):
+        r = createTriggers(server)
     return r
 
 
