@@ -83,12 +83,32 @@ def insertData(server):
         cursor.close()
         server.commit()
 
+def modifyProduct(server):
+    cursor=server.cursor()
+    with open("/Users/ananyagarg/ZappieDB-main/ZappieApp/productModifications.sql","r") as sql_file:
+        sql_queries=sql_file.read()
+    queries=sql_queries.split(";")
+    try:
+        for query in queries:
+            if query.strip():  # Skip empty queries
+                cursor.execute(query)
+        print("Product Modifications done successfully")
+        return(True)
+    except mysql.connector.Error as err:
+        print("Error while modifying Product:", err)
+        return(False)
+    finally:
+        cursor.close()
+        server.commit()
+
 def load(server):
     r = createDatabase(server)
     if (r):
         r = updateDatabaseModification(server)
     if (r):
         r = insertData(server)
+    if (r):
+        r = modifyProduct(server)
     return r
 
 
@@ -131,6 +151,6 @@ def cliConnect():
     createTriggers(server)
     updateDatabaseModification(server)
     insertData(server)
-    
+    modifyProduct(server)
 
     return server
