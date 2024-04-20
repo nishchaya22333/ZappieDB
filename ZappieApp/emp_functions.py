@@ -22,3 +22,18 @@ def empSignIn():
         id = empid
     print(id)
     return id
+
+def get_personal_details(empid):
+    server = conn.connect(host = "localhost", user = "root", password = admin, database = "zappiedb")
+    cursor = server.cursor()
+    sql = "SELECT * FROM DeliveryPartner WHERE Emp_id = %s"
+    cursor.execute(sql, (empid,))
+    result = cursor.fetchone()
+    if result:
+                print("Personal Details:")
+                print("Employee ID:", result[0])
+                print("Name:", result[1])
+                print("Email:", result[2])
+                print("Phone:", result[3])
+    else:
+                print("Employee not found.")
