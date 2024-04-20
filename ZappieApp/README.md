@@ -32,12 +32,6 @@ This folder contains all necessary files to run a basic version of Zappie.
 ## Usage:
 To use the currently working services, access the customer portal using `App.py`.
 
-## Contribution
-- **2022025 Aditi Sharma:** Customer Services' Functions, Testing/Debugging, Mock Data Insertion
-- **2022068 Ananya Garg:** SQL queries, Debugging, Database Creation
-- **2022276 Manas Chhabra:** Customer Services' Functions, Basic Interface
-- **2022333 Nishchaya Roy:** Database Initialization, Customer Services' Functions, Basic Interface
-
 # User Guide for Application
 
 ## Introduction:
