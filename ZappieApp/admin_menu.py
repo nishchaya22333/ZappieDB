@@ -3,6 +3,7 @@ import GUI_boot
 import getpass
 import admin_funtions
 import seller_functions
+import emp_functions
 
 def admin_access():
     # print("ok")
@@ -39,6 +40,30 @@ def seller_access():
                 orderid = int(input("Enter Order ID to get summary: "))
                 seller_functions.getOrderSummary(orderid)
             elif (choice == "6"):
+                print("Store ID:", storeid, "Logged Out")
+                storeid = -1
+                break
+            else:
+                print(art.traffic)
+                print("Invalid Choice.")
+    
+def emp_access():
+    empid = emp_functions.empSignIn()
+    if (empid == -1):
+        print("Sign In Failed")
+    else:
+        while(True):
+            choice = input("1. Get Personal Details \n2. Edit Profile \n3. View Delivery History \n4. View Rating \n5. Log Out \nEnter your choice: ")
+            if (choice == "1"):
+                pass
+            elif (choice == "2"):
+                pass
+            elif (choice == "3"):
+                pass
+            elif (choice == "4"):
+                pass
+            elif (choice == "5"):
+                print("Employee ID:", empid, "Logged Out")
                 storeid = -1
                 break
             else:
@@ -64,7 +89,7 @@ def main():
         #1 add new product 2. increase availibility 3. get inventory summary 4. get order summary
 
     elif (choice == "4"):
-        pass
+        emp_access()
         # 1. get personal details 2. edit personal details 3. view delivery history 4. view rating
     else:
         print(art.dog)
