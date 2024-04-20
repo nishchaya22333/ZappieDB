@@ -33,7 +33,7 @@ UPDATE 'Availability' SET Quantity = @current_quantity - 2 WHERE Prod_ID = 13
 INSERT INTO 'added_products' (Prod_ID, Quantity, Cart_ID) VALUES (13, 2, SELECT Current_Cart FROM 'Customer' WHERE Cust_ID = 1001)
 COMMIT;
 
---Transaction 2 : Customer with Cust_ID =  1002 wants to buy ‘5’ quantity of  product with Prod_ID = 13  (R(Qty), Qty = Qty - Q1, W(Qty), W(AP2))
+--Transaction 2 : Customer with Cust_ID =  1002 wants to buy ‘5’ quantity of  product with Prod_ID = 13  (R(Qty), Qty = Qty - Q2, W(Qty), W(AP2))
 
 START TRANSACTION;
 SELECT Quantity INTO @current_quantity FROM 'Availability' WHERE Prod_ID = 13
