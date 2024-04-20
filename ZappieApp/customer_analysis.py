@@ -6,7 +6,7 @@ import sys
 # custID = -1
 blockedAccounts = []
 
-admin = "rishtenaate09"
+admin = "nightfury"
 
 def getCartID():
     server = conn.connect(host = "localhost", user = "root", password = admin, database = "zappiedb")
@@ -174,8 +174,8 @@ def addProduct(custID):
                 print("Ordered Quantity not available")
             else:
                 count = count - quantity
-                cmd = "UPDATE Availability SET Quantity = %s WHERE Prod_ID = %s"
-                cursor.execute(cmd,(count,prod_id,))
+                # cmd = "UPDATE Availability SET Quantity = %s WHERE Prod_ID = %s"
+                # cursor.execute(cmd,(count,prod_id,))
                 cmd = "SELECT Current_Cart FROM customer where Cust_ID = %s"
                 cursor.execute(cmd,(custID,))
                 result = cursor.fetchall()
