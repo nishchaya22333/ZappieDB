@@ -64,3 +64,13 @@ ADD COLUMN `date_time` DATETIME NOT NULL;
 ALTER TABLE `cart` 
 ADD COLUMN `date_time` DATETIME NOT NULL;
 
+
+ALTER TABLE `DeliveryPartner`
+ADD COLUMN `rating` FLOAT;
+
+ALTER TABLE `DeliveryPartner`
+ADD COLUMN `status` VARCHAR(40);
+
+ALTER TABLE `Order` 
+ADD COLUMN `Feedback` VARCHAR(200);
+
