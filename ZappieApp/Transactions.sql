@@ -43,34 +43,79 @@ COMMIT;
 
 
 -- NON COFLICTING TRANSACTIONS
--- Transaction 1 : Change the password of customer with customer ID = 1001
+-- Example 1:
+-- T1 : Change the password of customer with customer ID = 1001
+-- T2: Change the password of customer with customer ID = 1002
 
+
+-- T1:
 START TRANSACTION;
-password = input("Enter new password: ")
-UPDATE Customer SET Password = password WHERE Cust_ID = 1001;
+password1 = input("Enter new password: ")
+UPDATE Customer SET Password = password1 WHERE Cust_ID = 1001;
 COMMIT;
 
--- Transaction 2 : Remove the product with product ID = 13 from added_products table of cart of customer with customer ID = 1001
+-- T2:
+START TRANSACTION;
+password2 = input("Enter new password: ")
+UPDATE Customer SET Password = password2 WHERE Cust_ID = 1002;
+COMMIT;
 
+-- Example 2:
+-- T1: Remove the product with product ID = 13 from added_products table of cart of customer with customer ID = 1001
+-- T2: Remove the product with product ID = 14 from added_products table of cart of customer with customer ID = 1001
+
+-- T1:
+START TRANSACTION;
+DELETE FROM added_products WHERE Prod_ID = 13  AND Cart_ID = (SELECT Current_Cart FROM customer where Cust_ID = 1001);
+COMMIT;  
+
+-- T2:
 START TRANSACTION;
 DELETE FROM added_products WHERE Prod_ID = 13  AND Cart_ID = (SELECT Current_Cart FROM customer where Cust_ID = 1001);
 COMMIT; 
 
--- Transaction 3 : Sign-In of customer with ID = 1001
 
+-- Example 3:
+-- T1: Sign-In of customer with ID = 1001
+-- T2: Sign-In of customer with ID = 1002
+
+-- T1:
 START TRANSACTION;
-name = input("Enter e-mail : ")
-pwd = input("Enter password : ")
-SELECT * FROM Customer WHERE Email = name AND Password = pwd
+name1 = input("Enter e-mail : ")
+pwd1 = input("Enter password : ")
+SELECT * FROM Customer WHERE Email = name1 AND Password = pwd1
 INSERT INTO cart (Cart_ID, Cust_ID, date_time) VALUES ((SELECT Current_Cart FROM customer where Cust_ID = 1001), 1001, NOW())
-
-
--- Transaction 4 :  Store with Store_ID = 4,  updating the quantity of a product
-START TRANSACTION;
-prod_id = int(input("Enter Product ID: "))
-addition = int(input("Enter Addition quantity: "))
-UPDATE Availability SET Quantity = Quantity + addition WHERE Prod_ID = prod_id AND Store_ID = 4"
 COMMIT;
+
+-- T2:
+START TRANSACTION;
+name2 = input("Enter e-mail : ")
+pwd2 = input("Enter password : ")
+SELECT * FROM Customer WHERE Email = name2 AND Password = pwd2
+INSERT INTO cart (Cart_ID, Cust_ID, date_time) VALUES ((SELECT Current_Cart FROM customer where Cust_ID = 1002), 1002, NOW())
+COMMIT;
+
+
+-- Example 4: 
+-- T1: Store with Store_ID = 4,  updating the quantity of a product
+-- T2: Store with Store_ID = 5,  updating the quantity of a product
+
+-- T1:
+START TRANSACTION;
+prod_id1 = int(input("Enter Product ID: "))
+addition1 = int(input("Enter Addition quantity: "))
+UPDATE Availability SET Quantity = Quantity + addition1 WHERE Prod_ID = prod_id1 AND Store_ID = 4
+COMMIT;
+
+
+-- T2:
+START TRANSACTION;
+prod_id2 = int(input("Enter Product ID: "))
+addition2 = int(input("Enter Addition quantity: "))
+UPDATE Availability SET Quantity = Quantity + addition2 WHERE Prod_ID = prod_id2 AND Store_ID = 5
+COMMIT;
+
+
 
 
 
