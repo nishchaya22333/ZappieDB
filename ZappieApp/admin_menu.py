@@ -55,7 +55,7 @@ def emp_access():
         while(True):
             choice = input("1. Get Personal Details \n2. Edit Profile \n3. View Delivery History \n4. View Rating \n5. Log Out \nEnter your choice: ")
             if (choice == "1"):
-                pass
+                emp_functions.get_personal_details(empid)
             elif (choice == "2"):
                 pass
             elif (choice == "3"):
