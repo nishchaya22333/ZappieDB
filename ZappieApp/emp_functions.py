@@ -37,3 +37,32 @@ def get_personal_details(empid):
                 print("Phone:", result[3])
     else:
                 print("Employee not found.")
+
+def view_delivery_history(empid):
+    server = conn.connect(host="localhost", user="root", password=admin, database="zappiedb")
+    cursor = server.cursor()
+
+    # Define the SQL query with placeholders
+    cmd = "SELECT o.Order_ID, o.PlacingDateTime, o.DeliveryDateTime, o.PaymentMode, o.Amount, o.Status, o.Trans_ID, o.Cust_ID, o.Emp_ID FROM `Order` AS o INNER JOIN DeliveryPartner AS d ON o.Emp_ID = d.Emp_ID WHERE o.Emp_ID = %s"
+
+    # Execute the query with the provided parameter
+    cursor.execute(cmd, (empid,))
+
+    # Fetch the results
+    result = cursor.fetchall()
+    if result:
+        for row in result:
+            print("Order ID:", row[0])
+            print("Placing Date and Time:", row[1])
+            print("Delivery Date and Time:", row[2])
+            print("Payment Mode:", row[3])
+            print("Amount:", row[4])
+            print("Status:", row[5])
+            print("Transaction ID:", row[6])
+            print("Customer ID:", row[7])
+            print("Employee ID:", row[8])
+    else:
+        print("No delivery history found")
+
+# get_personal_details(2)
+view_delivery_history(2)
