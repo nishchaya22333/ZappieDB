@@ -79,11 +79,11 @@ Enter your credentials to proceed.
 3. **Show All Products**
    - Display all available products.
 4. **Search Products**
-   - Search for specific products.
+   - Search for specific products by name.
 5. **Add Product**
-   - Add a product to the customer's shopping list.
+   - Add a product to the customer's shopping list using product ID.
 6. **Remove Product**
-   - Remove a product from the customer's shopping list.
+   - Remove a product from the customer's shopping list using product ID.
 7. **Place Order**
    - Finalize the shopping list and place an order.
 8. **My Analysis**
